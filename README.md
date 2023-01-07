@@ -1,2 +1,2 @@
 # LudomDare_52
-Games created for the ludom dare 52
+Game created for the ludom dare 52
