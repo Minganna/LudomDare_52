@@ -6,6 +6,7 @@
 #include "MultiplayerSessionsSubsystem.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
+#include "Engine/World.h"
 
 
 
@@ -69,6 +70,10 @@ bool UMenu::Initialize()
 	if (JoinButton)
 	{
 		JoinButton->OnClicked.AddDynamic(this, &UMenu::joinButtonClick);
+	}
+	if (PlayButton)
+	{
+		PlayButton->OnClicked.AddDynamic(this, &UMenu::playButtonClick);
 	}
 	return true;
 }
@@ -233,6 +238,15 @@ void UMenu::joinButtonClick()
 	{
 		//set to a 10000 as currently using game id of steam example
 		multiplayerSessionSubsystem->findSession(10000);
+	}
+}
+
+void UMenu::playButtonClick()
+{
+	UWorld* world = GetWorld();
+	if (world)
+	{
+		world->ServerTravel(FString(TEXT("/Game/Maps/GameLevel1")));
 	}
 }
 

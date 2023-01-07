@@ -54,6 +54,8 @@ private:
 	class UButton* HostButton;
 	UPROPERTY(meta = (BindWidget))
 	UButton* JoinButton;
+	UPROPERTY(meta = (BindWidget))
+	UButton* PlayButton;
 	
 	//callback function when a button is clicked
 	//needs to be UFUNCTION as they need to be called from blueprints
@@ -61,6 +63,8 @@ private:
 	void hostButtonClick();
 	UFUNCTION()
 	void joinButtonClick();
+	UFUNCTION()
+	void playButtonClick();
 
 	void menuTearDown();
 
