@@ -5,7 +5,9 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/InputComponent.h"
+#include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
+#include "../Actors/CrowProjectile.h"
 
 AMainCharacter::AMainCharacter()
 {
@@ -78,6 +80,12 @@ void AMainCharacter::turn(float value)
 void AMainCharacter::fire()
 {
 	FVector projectileSpawnLocation=getProjectileSpawnPoint();
+	FRotator projectSpawnRotation = getProjectileRotationPoint();
+	UWorld* world = GetWorld();
+	if (world)
+	{
+		world->SpawnActor<ACrowProjectile>(crowProjectiles,projectileSpawnLocation, projectSpawnRotation);
+	}
 }
 
 

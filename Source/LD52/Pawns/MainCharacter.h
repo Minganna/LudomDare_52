@@ -49,6 +49,8 @@ private:
 
 	//function to fire the crow
 	void fire();
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	TSubclassOf<class ACrowProjectile> crowProjectiles;
 
 public: 
 	// Called every frame

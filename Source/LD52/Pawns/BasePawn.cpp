@@ -61,6 +61,11 @@ FVector ABasePawn::getProjectileSpawnPoint()
 	return projectileSpawn->GetComponentLocation();
 }
 
+FRotator ABasePawn::getProjectileRotationPoint()
+{
+	return projectileSpawn->GetComponentRotation();
+}
+
 
 
 

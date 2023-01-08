@@ -22,6 +22,8 @@ protected:
 	UStaticMeshComponent* getTopMesh();
 	//getter of the projectile spawn location 
 	FVector getProjectileSpawnPoint();
+	//getter of the projectile spawn Rotation
+	FRotator getProjectileRotationPoint();
 
 
 private:

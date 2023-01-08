@@ -5,6 +5,7 @@
 #include "MainCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
+#include "TimerManager.h"
 // Called every frame
 void ASoulCharacter::Tick(float DeltaTime)
 {
@@ -33,6 +34,21 @@ void ASoulCharacter::Tick(float DeltaTime)
 		if (distance <= visibilityRange)
 		{
 			rotateBust(character->GetActorLocation());
+			if (!spottedPlayer)
+			{
+				spottedPlayer = true;
+				GetWorldTimerManager().SetTimer(disappearRateTimerHandle, this, &ASoulCharacter::checkDisappearCondition, timeTillDisappear, false);
+			}
+			
+		}
+		else
+		{
+			spottedPlayer = false;
+
+			if (topMesh)
+			{
+				topMesh->SetVisibility(true);
+			}
 		}
 	}
 
@@ -48,4 +64,17 @@ void ASoulCharacter::BeginPlay()
 	character = Cast<AMainCharacter>(UGameplayStatics::GetPlayerPawn(this, 0));
 
 	topMesh = getTopMesh();
+
+	
+}
+
+void ASoulCharacter::checkDisappearCondition()
+{
+	if (spottedPlayer)
+	{
+		if (topMesh)
+		{
+			topMesh->SetVisibility(false);
+		}
+	}
 }
