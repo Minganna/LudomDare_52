@@ -17,14 +17,21 @@ public:
 	ABasePawn();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	void rotateBust(FVector lookAtTarget);
+	//getter for the topMesh
+	UStaticMeshComponent* getTopMesh();
+	//getter of the projectile spawn location 
+	FVector getProjectileSpawnPoint();
+
 
 private:
 	//components below are constructed in the class constructor
 	//component used to handle collision, will replace the root component, forward declared in header file to avoid including a class that will not be used in header
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* capsuleComp;
+	//Empty mesh used for movements
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* movementsMesh;
 
 	//mesh of the base of the pawn
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
@@ -35,16 +42,5 @@ private:
 	//transform location where the projectile will spawn
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	USceneComponent* projectileSpawn;
-	//variable used to determine speed
-	UPROPERTY(EditAnywhere)
-	float speed = 400.0f;
-
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 };

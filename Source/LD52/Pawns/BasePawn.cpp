@@ -4,6 +4,7 @@
 #include "BasePawn.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -15,37 +16,51 @@ ABasePawn::ABasePawn()
 	capsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule component"));
 	//Assign the root as the capsule component
 	RootComponent = capsuleComp;
-
+	movementsMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Movements Part"));
+	movementsMesh->SetupAttachment(capsuleComp);
 	//Create the base mesh
 	baseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Bottom Part"));
-	baseMesh->SetupAttachment(capsuleComp);
+	baseMesh->SetupAttachment(movementsMesh);
 	//Create the TopPart of the mesh
 	topMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Top Part"));
 	topMesh->SetupAttachment(baseMesh);
 	//Create the spawning point
 	projectileSpawn = CreateDefaultSubobject<USceneComponent>(TEXT("Spawning point"));
 	projectileSpawn->SetupAttachment(topMesh);
-
 }
 
-// Called when the game starts or when spawned
-void ABasePawn::BeginPlay()
+
+void ABasePawn::rotateBust(FVector lookAtTarget)
 {
-	Super::BeginPlay();
-	
+	//check where the character should look at by substracting the position of the mouse to the current pos
+	FVector toTarget = lookAtTarget - topMesh->GetComponentLocation();
+	FVector forward = lookAtTarget - GetActorForwardVector();
+	//convert the vector to rotation
+	FRotator lookRotation = FRotator(0.0f, toTarget.Rotation().Yaw, 0.0f);
+	FRotator forwardRotation= FRotator(0.0f, forward.Rotation().Yaw, 0.0f);
+
+	topMesh->SetWorldRotation(
+			FMath::RInterpTo(topMesh->GetComponentRotation(),
+			lookRotation,
+			UGameplayStatics::GetWorldDeltaSeconds(this),
+			25.0f));
+
 }
 
-// Called every frame
-void ABasePawn::Tick(float DeltaTime)
+UStaticMeshComponent * ABasePawn::getTopMesh()
 {
-	Super::Tick(DeltaTime);
-
+	if (topMesh)
+	{
+		return topMesh;
+	}
+	return nullptr;
 }
 
-// Called to bind functionality to input
-void ABasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+FVector ABasePawn::getProjectileSpawnPoint()
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	return projectileSpawn->GetComponentLocation();
 }
+
+
+
 
